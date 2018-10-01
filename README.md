@@ -1,4 +1,4 @@
-# Re-port
+# 📋 Re-port
 
 Re-port is a tool useful to test your firewall setup, even when you have no access to its configuration.
 I've mainly built this tool to be sure my VPS provider does not interfere with the scanner I use to do my pentests.
@@ -20,6 +20,8 @@ It's composed by two main python scripts, one which needs to run in a trusted se
 
  After it has successfully connected to the server, it will negotiate a session key that it will be later used to authenticate each probe packets.
  It then will start to probe every port accordingly with the server while speaking on the communication channel.
+
+## How to use
 
 #### Client options
 
