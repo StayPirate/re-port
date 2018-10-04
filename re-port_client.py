@@ -32,3 +32,24 @@ parser.add_argument('--version',
     version='%(prog)s version {}'.format(VERSION)
     )
 args = parser.parse_args()
+
+#parse input ports
+port_list = []
+try:
+    for item in args.port:
+        if '-' in item:
+            min, max = item.split('-')
+            for i in range(int(min), int(max)+1):
+                port_list.append(i)
+        elif ',' in item:
+            for i in item.split(','):
+                port_list.append(int(i))
+        else:
+            port_list.append(int(item))
+except ValueError:
+    print('Please input proper ports values.')
+
+#check if there are values gragter then 65535 or smaller than 1
+for port in port_list:
+    if port < 1 or port > 65535:
+        print('Port '+str(port)+' is not valid.')
