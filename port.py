@@ -98,7 +98,7 @@ class PortList:
     """
     def __init__(self, unparsed_list=None):
         self.ports = []
-        self.ports = self.add(unparsed_list)
+        self.add(unparsed_list)
         self.index = 0 # Index to keep track of iterations
 
     def parse(self, unparsed_list):
@@ -168,11 +168,15 @@ class PortList:
         """
         print(msg)
 
-    def __iert__(self):
+    def __iter__(self):
         return self
 
-    def __next__(self): #TODO: read online docs first
-        pass
+    def __next__(self):
+        if self.ports == None or self.index >= len(self.ports):
+            raise StopIteration
+        else:
+            self.index = self.index + 1
+            return self.ports[self.index - 1]
 
 
 class PortListFormatError(Exception):
