@@ -104,7 +104,8 @@ class PortList:
     def parse(self, unparsed_list):
         """Parse ports or port ranges and return a list of int.
 
-        It can be passed a single value or a list of values to parse."""
+        It can be passed a single value or a list of values to parse.
+        """
         parsed_port = []
         try:
             for item in unparsed_list:

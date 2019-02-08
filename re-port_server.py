@@ -5,7 +5,7 @@ VERSION=0.1
 
 parser = argparse.ArgumentParser(
     description='Re-port server side.',
-    epilog='More info at https://github.com/TuxMeaLux/re-port'
+    epilog='More info at https://github.com/StayPirate/re-port'
     )
 parser.add_argument('--address',
     default='',

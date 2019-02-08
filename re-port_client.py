@@ -6,7 +6,7 @@ VERSION=0.1
 
 parser = argparse.ArgumentParser(
     description='Re-port client side.',
-    epilog='More info at https://github.com/TuxMeaLux/re-port'
+    epilog='More info at https://github.com/StayPirate/re-port'
     )
 parser.add_argument('address',
     help='Address of the server where to send test packets to.'
@@ -35,3 +35,6 @@ parser.add_argument('--version',
 args = parser.parse_args()
 
 ports = PortList(args.port)
+
+for port in ports:
+    print(str(port.port))
