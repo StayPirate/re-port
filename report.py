@@ -1,3 +1,4 @@
+import sys
 import dpkt
 import socket
 from dpkt.compat import compat_ord
@@ -113,12 +114,16 @@ class Report:
             address (str): source IP address of the scanner. Pakets don't match this source address are discarded
         """
 
-        if proto == 'tcp':
-            to_check_proto = dpkt.ip.IP_PROTO_TCP
-        elif proto == 'udp':
-            to_check_proto = dpkt.ip.IP_PROTO_UDP
-        else:
-            raise ProtocolError(Exception)
+        proto = 'asdasd'
+        try:
+            if proto == 'tcp':
+                to_check_proto = dpkt.ip.IP_PROTO_TCP
+            elif proto == 'udp':
+                to_check_proto = dpkt.ip.IP_PROTO_UDP
+            else:
+                raise ProtocolError(proto)
+        except ProtocolError as e:
+            sys.exit()
 
         for _, buf in self.pcap:    
             try:
@@ -173,3 +178,8 @@ class Report:
 
     def __exit__(self, type, value, tb):
         self.__del__()
+
+class ProtocolError(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+        print('\'%s\' is not a supported protocol. Acceptable protocols are: \'tcp\', \'udp\'.' % message)
