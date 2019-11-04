@@ -16,10 +16,11 @@ class Report:
     MAX_PORT = 65535
 
     def __init__(self, pcap):
-        self.open_ports = list()
+        self.open_ports = None
         self.dump_pcap = pcap
-        self.open = 0
-        self.closed = 0
+        self.open = 0       # Number of open ports
+        self.closed = 0     # Number of closed ports
+        self.index = 0      # Iteration index
 
         self.f = open(self.dump_pcap, 'rb')
         self.pcap = dpkt.pcap.Reader(self.f)
@@ -102,6 +103,12 @@ class Report:
 
         return switcher.get(packet.type, False)
 
+    def _sort_ports(self):
+        if self.open_ports == None:
+            pass
+        else:
+            self.open_ports.sort()
+
     def enumerate_ports(self, proto='tcp', address=None):
         """Enumerate open ports from a PCAP file.
 
@@ -114,7 +121,8 @@ class Report:
             address (str): source IP address of the scanner. Pakets don't match this source address are discarded
         """
 
-        proto = 'asdasd'
+        self.open_ports = list()
+
         try:
             if proto == 'tcp':
                 to_check_proto = dpkt.ip.IP_PROTO_TCP
@@ -164,7 +172,7 @@ class Report:
         Parameters:
             print_open (boolean): reverse the output, instead of closed ports print all open ones
         """
-        self.open_ports.sort()
+        self._sort_ports()
 
         for i in range(1, self.MAX_PORT):
             if i in self.open_ports:
@@ -179,7 +187,28 @@ class Report:
     def __exit__(self, type, value, tb):
         self.__del__()
 
+    def __iter__(self):
+        self._sort_ports()
+        return self
+
+    def __next__(self):
+        try:
+            if self.open_ports == None:
+                raise EmptyPortError
+            if self.index >= len(self.open_ports):
+                raise StopIteration
+            else:
+                self.index += 1
+                return self.open_ports[self.index - 1]
+        except EmptyPortError:
+            raise StopIteration
+
 class ProtocolError(Exception):
     def __init__(self, message):
         super().__init__(message)
         print('\'%s\' is not a supported protocol. Acceptable protocols are: \'tcp\', \'udp\'.' % message)
+
+class EmptyPortError(Exception):
+    def __init__(self):
+        super().__init__()
+        print('No packet dump has been processed yet.')
